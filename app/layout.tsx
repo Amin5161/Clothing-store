@@ -1,16 +1,20 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
+import Navbar from "../components/navbar/Navbar";
+import { AuthContextProvider } from "../contexts/AuthContext";
+import { SliderContextProvider } from "../contexts/sliderContext";
+import Footer from "../components/footer/Footer";
+import { CartContextProvider } from "../contexts/CartContext";
+import BreadCrumb from "../components/breadCrumb/BreadCrumb";
+import { Suspense } from "react";
+import { Roboto } from "next/font/google";
+import MobileMenuComponent from "@/components/mobileMenuComponent/MobileMenuComponent";
 
-const geistSans = localFont({
-  src: "./fonts/GeistVF.woff",
-  variable: "--font-geist-sans",
-  weight: "100 900",
-});
-const geistMono = localFont({
-  src: "./fonts/GeistMonoVF.woff",
-  variable: "--font-geist-mono",
-  weight: "100 900",
+const roboto = Roboto({
+  subsets: ["latin"],
+  variable: "--font-roboto",
+  weight: ["100", "900"],
 });
 
 export const metadata: Metadata = {
@@ -20,16 +24,42 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        {children}
+    <html lang="fa" dir="rtl">
+      <body>
+        <AuthContextProvider>
+          <CartContextProvider>
+            <SliderContextProvider>
+              <Navbar />
+              <BreadCrumb />
+              <div className="min-h-screen">
+                <Suspense fallback={<AdvancedLoading />}>{children}</Suspense>
+              </div>
+              <MobileMenuComponent />
+              <Footer />
+            </SliderContextProvider>
+          </CartContextProvider>
+        </AuthContextProvider>
       </body>
     </html>
+  );
+}
+
+function AdvancedLoading() {
+  return (
+    <div className="flex items-center justify-center h-screen bg-gray-100">
+      <div className="relative flex items-center justify-center">
+        {/* دایره های چرخشی */}
+        <div className="absolute animate-spin-slow rounded-full border-4 border-t-transparent border-blue-500 w-24 h-24"></div>
+        <div className="absolute animate-spin-fast rounded-full border-4 border-t-transparent border-purple-500 w-16 h-16"></div>
+        {/* متن لودینگ */}
+        <span className="absolute text-lg font-semibold text-gray-700">
+          در حال بارگذاری...
+        </span>
+      </div>
+    </div>
   );
 }

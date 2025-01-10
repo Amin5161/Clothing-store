@@ -1,5 +1,5 @@
 "use client";
-import Container from "@/_components/container/Container";
+import Container from "@/components/container/Container";
 import { getBlogArticles } from "@/services/api";
 import { TBlogCategoryKeys } from "@/serverTypes/serverTypes";
 import Image from "next/image";

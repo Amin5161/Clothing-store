@@ -1,6 +1,6 @@
 [build]
-  command = "pnpm build"
-  publish = ".next/output"
+  command = "npm run build"
+  publish = ".next/standalone"
 
-[functions]
-  node_bundler = "esbuild"
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
